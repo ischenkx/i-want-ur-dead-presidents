@@ -1,0 +1,63 @@
+syntax = "proto3";
+option go_package = "github.com/knights_of_nights/innotech-backend/entitiesGrpcGen";
+
+// requests
+
+message Entity {
+  string id = 1;
+  string title = 2;
+  string short_desc = 3;
+  string long_desc = 4;
+  double money_goal = 5;
+  string owner_id = 7;
+}
+
+message EntityArray {
+  repeated Entity entities = 1;
+}
+
+message IDArray {
+  repeated string ids = 1;
+}
+
+message CreateEntityRequest {
+  string title = 1;
+  string short_desc = 2;
+  string long_desc = 3;
+  double money_goal = 4;
+  string owner_id = 5;
+}
+
+message DeleteEntityRequest {
+  string id = 1;
+  optional string owner_id = 2;
+}
+
+message UpdateEntityRequest {
+  optional string title = 1;
+  optional string short_desc = 2;
+  optional string long_desc = 3;
+  optional double money_goal = 4;
+  optional string owner_id = 5;
+  string id = 6;
+}
+
+message GetEntityRequest {
+  IDArray ids = 1;
+  bool is_preview = 2;
+}
+
+message GetEntityByOwnerIDRequest {
+  string owner_id = 1;
+  optional int64 offset = 2;
+  optional int64 limit = 3;
+  bool is_preview = 4;
+}
+
+service Entities {
+   rpc Create(CreateEntityRequest) returns (Entity);
+   rpc Delete(DeleteEntityRequest) returns (Entity);
+   rpc Update(UpdateEntityRequest) returns (Entity);
+   rpc Get(GetEntityRequest) returns (EntityArray);
+   rpc GetByOwnerID(GetEntityByOwnerIDRequest) returns (EntityArray);
+}

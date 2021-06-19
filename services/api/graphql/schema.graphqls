@@ -1,0 +1,29 @@
+# GraphQL schema example
+#
+# https://gqlgen.com/getting-started/
+
+type User {
+  username: String!
+  id: String!
+}
+
+type Query {
+  getUserById(id: String!): User
+  getUserByName(name: String!): User
+  login(username: String!, password: String!): User
+  authorize: User
+}
+
+input RegistrationForm {
+  username: String!
+  password: String!
+}
+
+type Mutation {
+  logout: Boolean!
+  register(form: RegistrationForm!): User!
+  updateUsername(newUsername: String!): User!
+  updatePassword(prevPassword: String!, newPassword: String!): User!
+}
+
+scalar Void

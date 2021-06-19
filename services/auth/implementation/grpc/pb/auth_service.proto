@@ -1,0 +1,40 @@
+syntax="proto3";
+
+//import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/knights_of_nights/innotech-backend/auth";
+
+message AuthorizationRequest {
+  string access_token = 1;
+  string refresh_token = 2;
+}
+
+message EmptyRequest {}
+
+message JWTInfo {
+  string alg = 1;
+  string key = 2;
+}
+
+message UserInfo {
+  string id = 2;
+  string username = 1;
+  string status = 3;
+  string email = 4;
+}
+
+message TokensReply {
+  string refresh_token = 1;
+  string access_token = 2;
+}
+
+message AuthorizationReply {
+  UserInfo user_info = 1;
+  TokensReply tokens = 2;
+}
+
+service Auth {
+  rpc GenerateTokens(UserInfo) returns (TokensReply);
+  rpc Authorize(AuthorizationRequest) returns (AuthorizationReply);
+  rpc GetInfo(EmptyRequest) returns (JWTInfo);
+}

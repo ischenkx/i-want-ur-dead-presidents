@@ -1,0 +1,31 @@
+syntax="proto3";
+option go_package = "github.com/knights_of_nights/innotech-backend/grabbing";
+
+// empty message
+message EmptyReply {}
+
+// requests
+
+message Product {
+  string id = 1;
+  string inn = 2;
+}
+
+// model
+message Response {
+  Score score = 1;
+  string name = 2;
+  string fullName = 3;
+  string inn = 4;
+}
+
+message Score {
+  int32 score = 1;
+  int32 courtScore = 2;
+  int32 finKoefScore = 3;
+  int32 smartScore = 4;
+}
+
+service Grabbing {
+  rpc Get (Product) returns (Response) {}
+}

@@ -1,0 +1,50 @@
+syntax="proto3";
+option go_package = "github.com/knights_of_nights/innotech-backend/grabbing";
+
+// empty message
+message EmptyReply {}
+
+// requests
+message RegisterRequest {
+  string username = 1;
+  string password = 2;
+}
+
+message LoginRequest {
+  string username = 1;
+  string password = 2;
+}
+
+message UpdateUsernameRequest {
+  string id = 1;
+  string username = 2;
+}
+
+message UpdatePasswordRequest {
+  string id = 1;
+  string previous_password = 2;
+  string password = 3;
+}
+
+message GetUserRequest {
+  string id = 1;
+}
+
+message GetUserByNameRequest {
+  string name = 1;
+}
+
+// user model
+message User {
+  string username = 1;
+  string id = 2;
+}
+
+service Users {
+  rpc Login (LoginRequest) returns (User) {}
+  rpc Register (RegisterRequest) returns (User) {}
+  rpc Get (GetUserRequest) returns (User) {}
+  rpc GetByName(GetUserByNameRequest) returns (User) {}
+  rpc UpdateUsername (UpdateUsernameRequest) returns (EmptyReply) {}
+  rpc UpdatePassword (UpdatePasswordRequest) returns (EmptyReply) {}
+}
