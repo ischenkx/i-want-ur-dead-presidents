@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"github.com/ischenkx/innotech-backend/common"
 	"github.com/ischenkx/innotech-backend/services/grabbing/implementation/grabber"
 	"github.com/ischenkx/innotech-backend/services/grabbing/implementation/grpc/pb/generated"
 	grpcUsers "github.com/ischenkx/innotech-backend/services/grabbing/implementation/grpc/server"
@@ -26,16 +27,15 @@ var Config struct {
 		Collection string
 	}
 	Damia struct {
-		FnsKey     string
-		ScoringKey string
-		ArbitrKey  string
+		Fns     string `yaml:"fns"`
+		Scoring string `yaml:"scoring"`
+		Arbitr  string `yaml:"arbitr"`
 	}
 }
 
 //TODO put api-keys to safer place
 func initConfig() error {
 	viper.AddConfigPath(ConfigPath)
-
 	err := viper.ReadInConfig()
 	if err != nil {
 		return err
@@ -45,6 +45,7 @@ func initConfig() error {
 	if err != nil {
 		return err
 	}
+	fmt.Println(Config)
 
 	return nil
 }
@@ -54,6 +55,8 @@ func main() {
 		log.Fatal("failed to read config:", err)
 		return
 	}
+
+	Config.Database.Url = common.LoadMongoFromEnv()
 
 	db, err := mongodb.Connect(Config.Database.Url, Config.Database.Name, Config.Database.Collection)
 	if err != nil {
@@ -66,10 +69,12 @@ func main() {
 	}()
 
 	graber := grabber.Grabber{
-		FnsKey:     Config.Damia.FnsKey,
-		ScoringKey: Config.Damia.ScoringKey,
-		ArbitrKey:  Config.Damia.ArbitrKey,
+		FnsKey:     Config.Damia.Fns,
+		ScoringKey: Config.Damia.Scoring,
+		ArbitrKey:  Config.Damia.Arbitr,
 	}
+
+	fmt.Println(Config.Damia)
 
 	srv := service.New(db, &graber)
 

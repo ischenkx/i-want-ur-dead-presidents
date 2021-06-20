@@ -1,0 +1,9 @@
+port: 4040
+jwt:
+  key: my-32-character-ultra-secure-and-ultra-long-secret
+  alg: HS256
+  expiresIn: "30m"
+database:
+  name: INNOTECH-BACKEND
+  url: mongodb+srv://admin:UUt-VXV-c8B-nSq@cluster0.dm9xd.mongodb.net/?retryWrites=true&w=majority
+  collection: refresh_tokens

@@ -24,6 +24,10 @@ func (c Client) Login(ctx context.Context, dto users.LoginDto) (users.UserDto, e
 	return users.UserDto{
 		Username: res.Username,
 		ID:       res.Id,
+		LastName:  res.LastName,
+		FirstName: res.FirstName,
+		Email:     res.Email,
+		WalletID:  res.WalletID,
 	}, nil
 }
 
@@ -31,6 +35,9 @@ func (c Client) Register(ctx context.Context, dto users.RegisterDto) (users.User
 	res, err := c.grpcClient.Register(ctx, &users2.RegisterRequest{
 		Username: dto.Username,
 		Password: dto.Password,
+		LastName:  dto.LastName,
+		FirstName: dto.FirstName,
+		Email:     dto.Email,
 	})
 
 	if err != nil {
@@ -40,6 +47,10 @@ func (c Client) Register(ctx context.Context, dto users.RegisterDto) (users.User
 	return users.UserDto{
 		Username: res.Username,
 		ID:       res.Id,
+		LastName:  res.LastName,
+		FirstName: res.FirstName,
+		Email:     res.Email,
+		WalletID:  res.WalletID,
 	}, nil
 }
 
@@ -53,6 +64,10 @@ func (c Client) Get(ctx context.Context, id string) (users.UserDto, error) {
 	return users.UserDto{
 		Username: res.Username,
 		ID:       res.Id,
+		LastName:  res.LastName,
+		FirstName: res.FirstName,
+		Email:     res.Email,
+		WalletID:  res.WalletID,
 	}, nil
 }
 
@@ -66,6 +81,10 @@ func (c Client) GetByName(ctx context.Context, name string) (users.UserDto, erro
 	return users.UserDto{
 		Username: res.Username,
 		ID:       res.Id,
+		LastName:  res.LastName,
+		FirstName: res.FirstName,
+		Email:     res.Email,
+		WalletID:  res.WalletID,
 	}, nil
 }
 

@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"github.com/ischenkx/innotech-backend/common"
 	"github.com/ischenkx/innotech-backend/services/users/implementation/encryption"
 	"github.com/ischenkx/innotech-backend/services/users/implementation/grpc/pb/generated"
 	grpcUsers "github.com/ischenkx/innotech-backend/services/users/implementation/grpc/server"
@@ -29,6 +30,7 @@ var Config struct {
 }
 
 func initConfig() error {
+	viper.SetConfigName("users_config")
 	viper.AddConfigPath(ConfigPath)
 
 	err := viper.ReadInConfig()
@@ -49,6 +51,9 @@ func main() {
 		log.Fatal("failed to read config:", err)
 		return
 	}
+
+	Config.Database.Url = common.LoadMongoFromEnv()
+
 
 	db, err := mongodb.Connect(Config.Database.Url, Config.Database.Name, Config.Database.Collection)
 	if err != nil {
@@ -71,7 +76,7 @@ func main() {
 
 	users.RegisterUsersServer(s, usersServer)
 
-	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", Config.Port))
+	lis, err := net.Listen("tcp", fmt.Sprintf("localhost:%d", Config.Port))
 
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)

@@ -1,9 +1,9 @@
 port: 50051
+damia:
+  fns: e806a74f1d4f2876dadf8b9e086c205e980fa704
+  scoring: abae0a98a7fab849440b13be7e898dc155955e0f
+  arbitr: afc89ccbb1aa0b021b19fb6bd0fe02a55a6eb229
 database:
   name: INNOTECH-BACKEND
   url: mongodb+srv://admin:UUt-VXV-c8B-nSq@cluster0.dm9xd.mongodb.net/?retryWrites=true&w=majority
   collection: grabbing
-damia:
-  fns_key: e806a74f1d4f2876dadf8b9e086c205e980fa704
-  scoring_key: abae0a98a7fab849440b13be7e898dc155955e0f
-  arbitr_key: afc89ccbb1aa0b021b19fb6bd0fe02a55a6eb229

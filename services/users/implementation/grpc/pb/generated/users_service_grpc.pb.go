@@ -14,7 +14,7 @@ import (
 // Requires gRPC-Go v1.32.0 or later.
 const _ = grpc.SupportPackageIsVersion7
 
-// UsersClient is the client API for Users api.
+// UsersClient is the client API for Users service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type UsersClient interface {
@@ -88,7 +88,7 @@ func (c *usersClient) UpdatePassword(ctx context.Context, in *UpdatePasswordRequ
 	return out, nil
 }
 
-// UsersServer is the service API for Users api.
+// UsersServer is the server API for Users service.
 // All implementations must embed UnimplementedUsersServer
 // for forward compatibility
 type UsersServer interface {
@@ -125,7 +125,7 @@ func (UnimplementedUsersServer) UpdatePassword(context.Context, *UpdatePasswordR
 }
 func (UnimplementedUsersServer) mustEmbedUnimplementedUsersServer() {}
 
-// UnsafeUsersServer may be embedded to opt out of forward compatibility for this api.
+// UnsafeUsersServer may be embedded to opt out of forward compatibility for this service.
 // Use of this interface is not recommended, as added methods to UsersServer will
 // result in compilation errors.
 type UnsafeUsersServer interface {
@@ -244,7 +244,7 @@ func _Users_UpdatePassword_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
-// Users_ServiceDesc is the grpc.ServiceDesc for Users api.
+// Users_ServiceDesc is the grpc.ServiceDesc for Users service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var Users_ServiceDesc = grpc.ServiceDesc{
@@ -277,5 +277,5 @@ var Users_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "grabber_service.proto",
+	Metadata: "users_service.proto",
 }

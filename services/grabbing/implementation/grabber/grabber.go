@@ -3,8 +3,10 @@ package grabber
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	dto "github.com/ischenkx/innotech-backend/services/grabbing/service/db/dto"
 	models "github.com/ischenkx/innotech-backend/services/grabbing/service/db/models"
+	"io/ioutil"
 	"log"
 	"math"
 	"net/http"
@@ -34,13 +36,20 @@ func (g *Grabber) request(baseUrl string, params map[string]string) (map[string]
 
 	resp, err := http.Get(u.String())
 	if err != nil {
+		fmt.Println("Error:", err)
 		return nil, err
 	}
 
 	defer resp.Body.Close()
 	var mp map[string]interface{}
+
+	b, _ := ioutil.ReadAll(resp.Body)
+
+	fmt.Println(string(b))
+
 	err = json.NewDecoder(resp.Body).Decode(&mp)
 	if err != nil {
+		fmt.Println("Error 1:", err)
 		return nil, err
 	}
 
@@ -59,6 +68,10 @@ func (g *Grabber) GrabNames(product models.Product) (dto.GrabNamesResponse, erro
 		"key": g.FnsKey,
 		"req": product.Inn,
 	})
+
+	fmt.Println("mp:", mp)
+
+
 	if err != nil {
 		return dto.GrabNamesResponse{}, err
 	}
@@ -136,7 +149,7 @@ func (g *Grabber) GrabCourtScore(product models.Product) (dto.GrabCourtScoreResp
 
 	mp, err := g.request("https://damia.ru/api-arb/dela", map[string]string{
 		"key":       g.ArbitrKey,
-		"inn":       product.Inn,
+		"q":       product.Inn,
 		"role":      "2",
 		"from_date": timeBefore.Format("2006-01-02"),
 		"to_date":   timeNow.Format("2006-01-02"),

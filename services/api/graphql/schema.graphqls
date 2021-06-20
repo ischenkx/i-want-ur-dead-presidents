@@ -5,13 +5,23 @@
 type User {
   username: String!
   id: String!
+  balance: Float!
 }
 
-type Query {
-  getUserById(id: String!): User
-  getUserByName(name: String!): User
-  login(username: String!, password: String!): User
-  authorize: User
+type Entity {
+  title: String!
+  longDescription: String!
+  shortDescription: String!
+  moneyGoal: Float!
+  balance: Float!
+  ownerId: String!
+  id: String!
+}
+
+type Transaction {
+  fromId: String!
+  toId: String!
+  amount: Float!
 }
 
 input RegistrationForm {
@@ -19,11 +29,55 @@ input RegistrationForm {
   password: String!
 }
 
+input EntityCreationForm {
+  title: String!
+  longDescription: String!
+  shortDescription: String
+  moneyGoal: Float!
+}
+
+input EntityUpdateForm {
+  id: String!
+  title: String
+  longDescription: String
+  shortDescription: String
+}
+
+input UserEntitiesRequest {
+  offset: Int
+  limit: Int,
+  isPreview: Boolean
+}
+
+input GetEntitiesRequest {
+  offset: Int
+  limit: Int
+  isPreview: Boolean
+}
+
+input GetTransactionsRequest {
+  offset: Int
+  limit: Int
+}
+
+type Query {
+  getEntities(req: GetEntitiesRequest!): [Entity!]
+  getUserEntities(req: UserEntitiesRequest!): [Entity!]
+  getUserById(id: String!): User
+  getUserByName(name: String!): User
+  login(username: String!, password: String!): User
+  authorize: User
+  getBalance(id: String!): Float!
+  getTransactions(req: GetTransactionsRequest!): [Transaction]
+}
+
 type Mutation {
   logout: Boolean!
   register(form: RegistrationForm!): User!
   updateUsername(newUsername: String!): User!
   updatePassword(prevPassword: String!, newPassword: String!): User!
+  createEntity(form: EntityCreationForm!): Entity
+  deleteEntity(id: String!): Entity
+  updateEntity(updateForm: EntityUpdateForm!): Entity
+  transfer(from: String!, to: String!, amount: Float!): Boolean
 }
-
-scalar Void

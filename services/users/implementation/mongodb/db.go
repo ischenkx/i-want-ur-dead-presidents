@@ -35,6 +35,15 @@ func (db *DB) UpdateUser(ctx context.Context, updateDto models.UpdateUser) (mode
 	if updateDto.Password != nil {
 		mutation["password"] = *updateDto.Password
 	}
+	if updateDto.Email != nil {
+		mutation["email"] = *updateDto.Email
+	}
+	if updateDto.FirstName != nil {
+		mutation["firstname"] = *updateDto.FirstName
+	}
+	if updateDto.LastName != nil {
+		mutation["lastname"] = *updateDto.LastName
+	}
 
 	res := db.collection.FindOneAndUpdate(ctx,
 		bson.D{{"id", updateDto.ID}},

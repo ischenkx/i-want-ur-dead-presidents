@@ -2,12 +2,60 @@
 
 package model
 
+type Entity struct {
+	Title            string  `json:"title"`
+	LongDescription  string  `json:"longDescription"`
+	ShortDescription string  `json:"shortDescription"`
+	MoneyGoal        float64 `json:"moneyGoal"`
+	Balance          float64 `json:"balance"`
+	OwnerID          string  `json:"ownerId"`
+	ID               string  `json:"id"`
+}
+
+type EntityCreationForm struct {
+	Title            string  `json:"title"`
+	LongDescription  string  `json:"longDescription"`
+	ShortDescription *string `json:"shortDescription"`
+	MoneyGoal        float64 `json:"moneyGoal"`
+}
+
+type EntityUpdateForm struct {
+	ID               string  `json:"id"`
+	Title            *string `json:"title"`
+	LongDescription  *string `json:"longDescription"`
+	ShortDescription *string `json:"shortDescription"`
+}
+
+type GetEntitiesRequest struct {
+	Offset    *int  `json:"offset"`
+	Limit     *int  `json:"limit"`
+	IsPreview *bool `json:"isPreview"`
+}
+
+type GetTransactionsRequest struct {
+	Offset *int `json:"offset"`
+	Limit  *int `json:"limit"`
+}
+
 type RegistrationForm struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
 }
 
+type Transaction struct {
+	FromID string  `json:"fromId"`
+	ToID   string  `json:"toId"`
+	Amount float64 `json:"amount"`
+}
+
 type User struct {
-	Username string `json:"username"`
-	ID       string `json:"id"`
+	Username string  `json:"username"`
+	ID       string  `json:"id"`
+	Balance  float64 `json:"balance"`
+}
+
+type UserEntitiesRequest struct {
+	Offset    *int  `json:"offset"`
+	Limit     *int  `json:"limit"`
+	IsPreview *bool `json:"isPreview"`
 }

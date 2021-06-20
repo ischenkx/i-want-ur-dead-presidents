@@ -3,8 +3,9 @@ package main
 import (
 	"context"
 	"fmt"
+	"github.com/ischenkx/innotech-backend/common"
 	"github.com/ischenkx/innotech-backend/services/entities/implementation/grpc/pb/generated"
-	grpcProducts "github.com/ischenkx/innotech-backend/services/entities/implementation/grpc/server"
+	"github.com/ischenkx/innotech-backend/services/entities/implementation/grpc/server"
 	"github.com/ischenkx/innotech-backend/services/entities/implementation/mongodb"
 	"github.com/ischenkx/innotech-backend/services/entities/service"
 	"github.com/spf13/viper"
@@ -27,6 +28,7 @@ var Config struct {
 }
 
 func initConfig() error {
+	viper.SetConfigName("entities_config")
 	viper.AddConfigPath(ConfigPath)
 
 	err := viper.ReadInConfig()
@@ -48,6 +50,9 @@ func main() {
 		return
 	}
 
+	Config.Database.Url = common.LoadMongoFromEnv()
+
+
 	db, err := mongodb.Connect(Config.Database.Url, Config.Database.Name, Config.Database.Collection)
 	if err != nil {
 		log.Fatalf("failed to connect to mongo: %v", err)
@@ -62,9 +67,9 @@ func main() {
 
 	s := grpc.NewServer()
 
-	products.RegisterProductsServer(s, grpcProducts.New(srv))
+	entitiesGrpcGen.RegisterEntitiesServer(s, server.New(srv))
 
-	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", Config.Port))
+	lis, err := net.Listen("tcp", fmt.Sprintf("localhost:%d", Config.Port))
 
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)

@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"github.com/ischenkx/innotech-backend/common"
 	"github.com/ischenkx/innotech-backend/services/auth/implementation/grpc/pb/generated"
 	authGrpcServer "github.com/ischenkx/innotech-backend/services/auth/implementation/grpc/server"
 	"github.com/ischenkx/innotech-backend/services/auth/implementation/mongodb"
@@ -34,6 +35,7 @@ var Config struct {
 }
 
 func initConfig() error {
+	viper.SetConfigName("auth_config")
 	viper.AddConfigPath(ConfigPath)
 
 	err := viper.ReadInConfig()
@@ -49,11 +51,15 @@ func initConfig() error {
 	return nil
 }
 
+
+
 func main() {
 	if err := initConfig(); err != nil {
 		log.Fatal("failed to read config:", err)
 		return
 	}
+
+	Config.Database.Url = common.LoadMongoFromEnv()
 
 	db, err := mongodb.Connect(Config.Database.Url, Config.Database.Name, Config.Database.Collection)
 	if err != nil {
@@ -65,10 +71,7 @@ func main() {
 		}
 	}()
 
-	log.Println("expires in:", Config.JWT.ExpiresIn)
-
 	srv := service.New(db, Config.JWT.Key, Config.JWT.Alg, Config.JWT.ExpiresIn)
-
 
 	authServer := authGrpcServer.New(srv)
 
@@ -76,7 +79,9 @@ func main() {
 
 	auth.RegisterAuthServer(s, authServer)
 
-	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", Config.Port))
+	lis, err := net.Listen("tcp", fmt.Sprintf("localhost:%d", Config.Port))
+
+	log.Println("starting auth service on port:", 4040)
 
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)

@@ -2,7 +2,7 @@ package server
 
 import (
 	"context"
-	"github.com/ischenkx/innotech-backend/services/users/implementation/grpc/pb/generated"
+	users "github.com/ischenkx/innotech-backend/services/users/implementation/grpc/pb/generated"
 	"github.com/ischenkx/innotech-backend/services/users/service"
 )
 
@@ -29,19 +29,27 @@ func (s *Server) Login(ctx context.Context, req *users.LoginRequest) (*users.Use
 		return nil, err
 	}
 	return &users.User{
-		Username: u.Username,
-		Id:       u.ID,
+		Username:  u.Username,
+		Id:        u.ID,
+		LastName:  u.LastName,
+		FirstName: u.FirstName,
+		Email:     u.Email,
+		WalletID:  u.WalletID,
 	}, nil
 }
 
 func (s *Server) Register(ctx context.Context, req *users.RegisterRequest) (*users.User, error) {
-	u, err := s.service.Register(ctx, req.Username, req.Password)
+	u, err := s.service.Register(ctx, req.Username, req.Password, req.FirstName, req.LastName, req.Email)
 	if err != nil {
 		return nil, err
 	}
 	return &users.User{
-		Username: u.Username,
-		Id:       u.ID,
+		Username:  u.Username,
+		Id:        u.ID,
+		LastName:  u.LastName,
+		FirstName: u.FirstName,
+		Email:     u.Email,
+		WalletID:  u.WalletID,
 	}, nil
 }
 
@@ -51,8 +59,12 @@ func (s *Server) Get(ctx context.Context, req *users.GetUserRequest) (*users.Use
 		return nil, err
 	}
 	return &users.User{
-		Username: u.Username,
-		Id:       u.ID,
+		Username:  u.Username,
+		Id:        u.ID,
+		LastName:  u.LastName,
+		FirstName: u.FirstName,
+		Email:     u.Email,
+		WalletID:  u.WalletID,
 	}, nil
 }
 
@@ -62,8 +74,12 @@ func (s *Server) GetByName(ctx context.Context, req *users.GetUserByNameRequest)
 		return nil, err
 	}
 	return &users.User{
-		Username: u.Username,
-		Id:       u.ID,
+		Username:  u.Username,
+		Id:        u.ID,
+		LastName:  u.LastName,
+		FirstName: u.FirstName,
+		Email:     u.Email,
+		WalletID:  u.WalletID,
 	}, nil
 }
 

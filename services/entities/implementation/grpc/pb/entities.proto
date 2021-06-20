@@ -9,7 +9,16 @@ message Entity {
   string short_desc = 3;
   string long_desc = 4;
   double money_goal = 5;
-  string owner_id = 7;
+  string owner_id = 6;
+  string directorFullName = 7;
+  string fullCompanyName = 8;
+  string inn = 9;
+  string orgnn = 10;
+  string companyEmail = 11;
+  string ownerFullName = 12;
+  string ownerPost = 13;
+  string passportData = 14;
+  string activityField = 15;
 }
 
 message EntityArray {
@@ -26,6 +35,15 @@ message CreateEntityRequest {
   string long_desc = 3;
   double money_goal = 4;
   string owner_id = 5;
+  string directorFullName = 6;
+  string fullCompanyName = 7;
+  string inn = 8;
+  string orgnn = 9;
+  string companyEmail = 10;
+  string ownerFullName = 11;
+  string ownerPost = 12;
+  string passportData = 13;
+  string activityField = 14;
 }
 
 message DeleteEntityRequest {
@@ -40,6 +58,15 @@ message UpdateEntityRequest {
   optional double money_goal = 4;
   optional string owner_id = 5;
   string id = 6;
+  optional string directorFullName = 7;
+  optional string fullCompanyName = 8;
+  optional string inn = 9;
+  optional string orgnn = 10;
+  optional string companyEmail = 11;
+  optional string ownerFullName = 12;
+  optional string ownerPost = 13;
+  optional string passportData = 14;
+  optional string activityField = 15;
 }
 
 message GetEntityRequest {
@@ -54,10 +81,17 @@ message GetEntityByOwnerIDRequest {
   bool is_preview = 4;
 }
 
+message GetRangeEntityRequest {
+  optional int64 offset = 1;
+  optional int64 limit = 2;
+  bool is_preview = 3;
+}
+
 service Entities {
    rpc Create(CreateEntityRequest) returns (Entity);
    rpc Delete(DeleteEntityRequest) returns (Entity);
    rpc Update(UpdateEntityRequest) returns (Entity);
    rpc Get(GetEntityRequest) returns (EntityArray);
    rpc GetByOwnerID(GetEntityByOwnerIDRequest) returns (EntityArray);
+   rpc GetRange(GetRangeEntityRequest) returns (EntityArray);
 }

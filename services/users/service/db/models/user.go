@@ -1,13 +1,20 @@
 package models
 
 type User struct {
-	Username string
-	Password string
-	ID       string
+	LastName  string
+	FirstName string
+	Email     string
+	Username  string
+	Password  string
+	WalletID  string
+	ID        string
 }
 
 type UpdateUser struct {
-	Username *string
-	Password *string
-	ID       string
+	LastName  *string
+	FirstName *string
+	Email     *string
+	Username  *string
+	Password  *string
+	ID        string
 }

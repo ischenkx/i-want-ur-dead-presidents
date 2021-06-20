@@ -1,0 +1,40 @@
+syntax = "proto3";
+option go_package = "github.com/knights_of_nights/innotech-backend/billingGrpcGen";
+
+import "google/protobuf/timestamp.proto";
+
+// requests?
+
+message IdArray {
+  repeated string ids = 1;
+}
+
+message GetTransactionsRequest {
+  string id = 1;
+  optional int64 offset = 2;
+  optional int64 limit = 3;
+}
+
+message Transaction {
+  string idFrom = 1;
+  string idTo = 2;
+  double amount = 3;
+  google.protobuf.Timestamp timestamp = 4;
+
+}
+
+message TransactionArray {
+  repeated Transaction transactions = 1;
+}
+
+message BalanceArray {
+  repeated double balances = 1;
+}
+
+message Empty {}
+
+service Billing {
+  rpc GetBalances(IdArray) returns (BalanceArray);
+  rpc GetTransactions(GetTransactionsRequest) returns (TransactionArray);
+  rpc Transfer(Transaction) returns (Empty);
+}

@@ -23,6 +23,7 @@ type EntitiesClient interface {
 	Update(ctx context.Context, in *UpdateEntityRequest, opts ...grpc.CallOption) (*Entity, error)
 	Get(ctx context.Context, in *GetEntityRequest, opts ...grpc.CallOption) (*EntityArray, error)
 	GetByOwnerID(ctx context.Context, in *GetEntityByOwnerIDRequest, opts ...grpc.CallOption) (*EntityArray, error)
+	GetRange(ctx context.Context, in *GetRangeEntityRequest, opts ...grpc.CallOption) (*EntityArray, error)
 }
 
 type entitiesClient struct {
@@ -78,6 +79,15 @@ func (c *entitiesClient) GetByOwnerID(ctx context.Context, in *GetEntityByOwnerI
 	return out, nil
 }
 
+func (c *entitiesClient) GetRange(ctx context.Context, in *GetRangeEntityRequest, opts ...grpc.CallOption) (*EntityArray, error) {
+	out := new(EntityArray)
+	err := c.cc.Invoke(ctx, "/Entities/GetRange", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // EntitiesServer is the server API for Entities service.
 // All implementations must embed UnimplementedEntitiesServer
 // for forward compatibility
@@ -87,6 +97,7 @@ type EntitiesServer interface {
 	Update(context.Context, *UpdateEntityRequest) (*Entity, error)
 	Get(context.Context, *GetEntityRequest) (*EntityArray, error)
 	GetByOwnerID(context.Context, *GetEntityByOwnerIDRequest) (*EntityArray, error)
+	GetRange(context.Context, *GetRangeEntityRequest) (*EntityArray, error)
 	mustEmbedUnimplementedEntitiesServer()
 }
 
@@ -108,6 +119,9 @@ func (UnimplementedEntitiesServer) Get(context.Context, *GetEntityRequest) (*Ent
 }
 func (UnimplementedEntitiesServer) GetByOwnerID(context.Context, *GetEntityByOwnerIDRequest) (*EntityArray, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetByOwnerID not implemented")
+}
+func (UnimplementedEntitiesServer) GetRange(context.Context, *GetRangeEntityRequest) (*EntityArray, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetRange not implemented")
 }
 func (UnimplementedEntitiesServer) mustEmbedUnimplementedEntitiesServer() {}
 
@@ -212,6 +226,24 @@ func _Entities_GetByOwnerID_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Entities_GetRange_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetRangeEntityRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(EntitiesServer).GetRange(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/Entities/GetRange",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(EntitiesServer).GetRange(ctx, req.(*GetRangeEntityRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Entities_ServiceDesc is the grpc.ServiceDesc for Entities service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -238,6 +270,10 @@ var Entities_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetByOwnerID",
 			Handler:    _Entities_GetByOwnerID_Handler,
+		},
+		{
+			MethodName: "GetRange",
+			Handler:    _Entities_GetRange_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -1,0 +1,5 @@
+port: 3030
+database:
+  name: INNOTECH-BACKEND
+  url: mongodb+srv://admin:UUt-VXV-c8B-nSq@cluster0.dm9xd.mongodb.net/?retryWrites=true&w=majority
+  collection: entities

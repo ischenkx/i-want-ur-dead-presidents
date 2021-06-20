@@ -1,0 +1,23 @@
+syntax="proto3";
+option go_package = "github.com/knights_of_nights/innotech-backend/aggregatorGrpcGen";
+
+// empty message
+message EmptyReply {}
+
+message Product {
+  string id = 1;
+  string inn = 2;
+}
+
+// model
+message Response {
+  string id = 1;
+  string inn = 2;
+  double overallScore = 3;
+  string shortCompanyName = 4;
+  string fullCompanyName = 5;
+}
+
+service Aggregator {
+  rpc Get (Product) returns (Response) {}
+}

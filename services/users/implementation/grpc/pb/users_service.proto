@@ -1,5 +1,5 @@
 syntax="proto3";
-option go_package = "github.com/knights_of_nights/innotech-backend/grabbing";
+option go_package = "github.com/knights_of_nights/innotech-backend/users";
 
 // empty message
 message EmptyReply {}
@@ -8,6 +8,9 @@ message EmptyReply {}
 message RegisterRequest {
   string username = 1;
   string password = 2;
+  string firstName = 3;
+  string lastName = 4;
+  string email = 5;
 }
 
 message LoginRequest {
@@ -38,6 +41,11 @@ message GetUserByNameRequest {
 message User {
   string username = 1;
   string id = 2;
+  string lastName = 3;
+  string firstName = 4;
+  string email = 5;
+  string password = 6;
+  string walletID = 7;
 }
 
 service Users {

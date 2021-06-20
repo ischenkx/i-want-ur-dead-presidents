@@ -10,7 +10,7 @@ import (
 )
 
 var previewProjection = bson.M{
-	"long_desc": 0,
+	"longdesc": 0,
 }
 
 type DB struct {
@@ -39,22 +39,52 @@ func (db *DB) Update(ctx context.Context, updateDto entities.UpdateEntityDto) (m
 	mutation := bson.M{}
 
 	if updateDto.OwnerID != nil {
-		mutation["owner_id"] = *updateDto.OwnerID
+		mutation["ownerid"] = *updateDto.OwnerID
 	}
 	if updateDto.Title != nil {
 		mutation["title"] = *updateDto.Title
 	}
 	if updateDto.LongDesc != nil {
-		mutation["long_desc"] = *updateDto.LongDesc
+		mutation["longdesc"] = *updateDto.LongDesc
 	}
 	if updateDto.ShortDesc != nil {
-		mutation["short_desc"] = *updateDto.ShortDesc
+		mutation["shortdesc"] = *updateDto.ShortDesc
 	}
 	if updateDto.MoneyGoal != nil {
-		mutation["money_goal"] = *updateDto.MoneyGoal
+		mutation["moneygoal"] = *updateDto.MoneyGoal
+	}
+	if updateDto.DirectorFullName != nil {
+		mutation["directorfullname"] = *updateDto.DirectorFullName
+	}
+	if updateDto.FullCompanyName != nil {
+		mutation["fullcompanyname"] = *updateDto.FullCompanyName
+	}
+	if updateDto.Inn != nil {
+		mutation["inn"] = *updateDto.Inn
+	}
+	if updateDto.Orgnn != nil {
+		mutation["orgnn"] = *updateDto.Orgnn
+	}
+	if updateDto.CompanyEmail != nil {
+		mutation["companyemail"] = *updateDto.CompanyEmail
+	}
+	if updateDto.OwnerFullName != nil {
+		mutation["ownerfullname"] = *updateDto.OwnerFullName
+	}
+	if updateDto.OwnerPost != nil {
+		mutation["ownerpost"] = *updateDto.OwnerPost
+	}
+	if updateDto.PassportData != nil {
+		mutation["passportdata"] = *updateDto.PassportData
+	}
+	if updateDto.PictureUrl != nil {
+		mutation["pictureurl"] = *updateDto.PictureUrl
+	}
+	if updateDto.ActivityField != nil {
+		mutation["activityfield"] = *updateDto.ActivityField
 	}
 
-	res := db.collection.FindOneAndUpdate(ctx, filter, bson.D{{"$set", mutation}})
+	res := db.collection.FindOneAndUpdate(ctx, filter, bson.D{{"$set", mutation}}, options.FindOneAndUpdate().SetReturnDocument(options.After))
 
 	if res.Err() != nil {
 		return models.Entity{}, res.Err()
@@ -103,7 +133,7 @@ func (db *DB) Get(ctx context.Context, dto entities.GetEntitiesDto) ([]models.En
 }
 
 func (db *DB) GetByOwnerID(ctx context.Context, dto entities.GetEntitiesByOwnerIdDto) ([]models.Entity, error) {
-	filter := bson.D{{"owner_id", dto.OwnerID}}
+	filter := bson.D{{"ownerid", dto.OwnerID}}
 
 	var findOpts []*options.FindOptions
 
@@ -134,13 +164,41 @@ func (db *DB) GetByOwnerID(ctx context.Context, dto entities.GetEntitiesByOwnerI
 	return ents, err
 }
 
+func (db *DB) GetRange(ctx context.Context, dto entities.GetEntitiesRangeDto) ([]models.Entity, error) {
+
+	var opts []*options.FindOptions
+
+	if dto.Offset == nil {
+		opts = append(opts, options.Find().SetSkip(*dto.Offset))
+	}
+
+	if dto.Limit == nil {
+		opts = append(opts, options.Find().SetLimit(*dto.Limit))
+	}
+
+	res, err := db.collection.Find(ctx, bson.D{}, opts...)
+
+	if err != nil {
+		return nil, err
+	}
+
+	var ents []models.Entity
+
+	if err := res.Decode(&ents); err != nil {
+		return nil, err
+	}
+
+	return ents, nil
+
+}
+
 func (db *DB) Delete(ctx context.Context, deleteDto entities.DeleteEntityDto) (models.Entity, error) {
 	filter := bson.M{
 		"id": deleteDto.ID,
 	}
 
 	if deleteDto.OwnerID != nil {
-		filter["owner_id"] = *deleteDto.OwnerID
+		filter["ownerid"] = *deleteDto.OwnerID
 	}
 
 	res := db.collection.FindOneAndDelete(ctx, filter)

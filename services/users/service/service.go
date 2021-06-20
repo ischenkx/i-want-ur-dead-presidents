@@ -26,7 +26,7 @@ func (s *Service) Login(ctx context.Context, username, password string) (models.
 	return user, err
 }
 
-func (s *Service) Register(ctx context.Context, username, password string) (models.User, error) {
+func (s *Service) Register(ctx context.Context, username, password, firstName, lastName, email string) (models.User, error) {
 	hashedPassword, err := s.hasher.Hash(password)
 
 	if err != nil {
@@ -34,9 +34,13 @@ func (s *Service) Register(ctx context.Context, username, password string) (mode
 	}
 
 	user, err := s.db.CreateUser(ctx, models.User{
-		ID:       uuid.New().String(),
-		Username: username,
-		Password: hashedPassword,
+		LastName:  lastName,
+		FirstName: firstName,
+		Email:     email,
+		Username:  username,
+		Password:  hashedPassword,
+		WalletID:  uuid.New().String(),
+		ID:        uuid.New().String(),
 	})
 
 	if err != nil {

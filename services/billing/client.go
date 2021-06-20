@@ -1,7 +1,26 @@
 package billing
 
-type Client interface {
-	GetBalances(ids []string) ([]int64, error)
+import (
+	"context"
+	"time"
+)
 
-	RegisterWallet(id string) error
+type Transaction struct {
+	From string
+	To string
+	TimeStamp time.Time
+
+	Amount float64
+}
+
+type GetTransactionsDto struct {
+	Offset *int64
+	Limit *int64
+	Id string
+}
+
+type Client interface {
+	GetBalances(ctx context.Context, ids []string) ([]float64, error)
+	Transfer(ctx context.Context, a, b string, amount float64) error
+	GetTransactions(ctx context.Context, dto GetTransactionsDto) ([]Transaction, error)
 }

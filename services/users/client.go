@@ -3,7 +3,12 @@ package users
 import "context"
 
 type UserDto struct {
-	Username, ID string
+	ID        string
+	Username  string
+	LastName  string
+	FirstName string
+	Email     string
+	WalletID  string
 }
 
 type LoginDto struct {
@@ -12,6 +17,9 @@ type LoginDto struct {
 
 type RegisterDto struct {
 	Username, Password string
+	LastName  string
+	FirstName string
+	Email     string
 }
 
 type Client interface {
