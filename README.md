@@ -10,6 +10,8 @@ Backend сервисы для проекта Scrudge  для хакатона In
 
 -блокнот с пояснениями и рабочей версией алгоритма машинного обучения для персонализации выдачи https://www.kaggle.com/denshlk/recommendation-sys-v0
 
+-graphQL плейграунд на сервере с залитой системой https://project-zebra.sloppy.zone/
+
 -рабочая документация проекта https://www.notion.so/linkinweb/Innotech-052fc7f98fc64fc68d733684d3f6b1fb
 
 -дизайн  https://www.figma.com/team_invite/redeem/c5NHTzR6rg2OoNXBTfEiG5
